@@ -14,12 +14,10 @@
             <v-list-item v-for="item in lists" :key="item.id">
               <v-list-item-content>
                 <v-btn
-                  @click="selected"
+                  @click="selected(item.id)"
                   class="font-weight-bold"
-                  :disabled="item.name !== 'Relm Cannabis'"
                   dark
                   color="#FF5752"
-                  to="/"
                   >{{ item.name }}</v-btn
                 >
               </v-list-item-content>
@@ -34,12 +32,14 @@
 </template>
 <script>
 //https://auth.dev.api.unoapp.io/api/v1/businesses/b641f415-9861-4f8d-a22e-f690bd7912c1?withBranding=true
+//https://auth.dev.api.unoapp.io/api/v1/businesses/b641f415-9861-4f8d-a22e-f690bd7912c1
 import axios from "axios";
 export default {
   data() {
     return {
       lists: [],
       selectedItem: "",
+      id: "",
     };
   },
   mounted() {
@@ -48,7 +48,7 @@ export default {
       this.$router.push({ name: "loginPage" });
     }
 
-    console.log(user, "jj");
+    console.log(user, "user"); // post -- url, body, config , patch, put
     const getBusinessList = async () => {
       let result = await axios.get(
         "https://auth.dev.api.unoapp.io/api/v1/users/businesses",
@@ -60,19 +60,28 @@ export default {
         }
       );
       this.lists = result.data.payload;
-      //console.log(result.data.payload);
+      console.log(this.lists, " this.lists ");
     };
+
     getBusinessList();
   },
   methods: {
     logout() {
       console.log("logout");
-      let user = localStorage.removeItem("user-info");
-      if (!user) {
-        this.$router.push({ name: "loginPage" });
-      }
+      // let user = localStorage.removeItem("user-info");
+      JSON.parse(localStorage.removeItem("selected-app"));
+      //if (!user) {
+      this.$router.push({ name: "loginPage" });
+      // }
     },
-    selected() {},
+    selected(id) {
+      this.id = id;
+      if (JSON.parse(localStorage.getItem("user-info"))) {
+        localStorage.setItem("selected-app", id);
+        this.$router.push({ name: "home" });
+      }
+      console.log("id", this.id);
+    },
   },
 };
 </script>

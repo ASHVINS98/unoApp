@@ -20,7 +20,13 @@
     </v-menu> -->
 
     <v-btn icon>
-      <v-icon @click="updateRightDrawer">mdi-dots-vertical</v-icon>
+      <v-icon
+        @click="
+          updateRightDrawer();
+          SetLocations();
+        "
+        >mdi-dots-vertical</v-icon
+      >
     </v-btn>
   </v-app-bar>
 </template>
@@ -39,5 +45,6 @@ export default {
       this.$emit("right-drawer");
     },
   },
+  // inject:['listTop']
 };
 </script>

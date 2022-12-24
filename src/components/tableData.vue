@@ -1,13 +1,7 @@
 <template>
   <div>
-    <top-nav
-      @complete-event="toggleDrawer"
-      @right-drawer="toggleRight"
-    ></top-nav>
-    <left-nav :openDrawer="openDrawer"></left-nav>
-    <side-bar :SideDrawer="SideDrawer"></side-bar>
     <div>
-      <h1>Dashboard</h1>
+      <h1>Dashboard {{ brandDetails?.name }}</h1>
       <v-data-table
         :headers="headers"
         :items="dataTable"
@@ -40,8 +34,7 @@ export default {
     return {
       snackbar: false,
       // selectedEmployee: "",
-      openDrawer: true,
-      SideDrawer: true,
+      isLocationChange: false,
       headers: [
         {
           text: "Name",
@@ -65,6 +58,7 @@ export default {
         },
       ],
       dataTable: [],
+      brandDetails: {},
     };
   },
   mounted() {
@@ -76,8 +70,31 @@ export default {
       });
     } else {
       const getTableList = async () => {
+        const selectedAppId = localStorage.getItem("selected-app");
+        await axios.patch(
+          `https://auth.dev.api.unoapp.io/api/v1/users/businesses/${selectedAppId}`,
+          {},
+          {
+            headers: {
+              "api-token": "6090a6ee31d7d70b13857118a7ead5d6a5d83a8a",
+              "auth-token": user["auth-token"],
+            },
+          }
+        );
+        const brandingData = await axios.get(
+          `https://auth.dev.api.unoapp.io/api/v1/businesses/${selectedAppId}?withBranding=true`,
+          {
+            headers: {
+              "api-token": "6090a6ee31d7d70b13857118a7ead5d6a5d83a8a",
+              "auth-token": user["auth-token"],
+            },
+          }
+        );
+        this.brandDetails = brandingData.data.payload;
+
         let result = await axios.get(
-          "https://tables.dev.api.unoapp.io/api/v1/tables?page=2&limit=1",
+          //`https://tables.dev.api.unoapp.io/api/v1/tables?page=2&limit=${selectedAppId}`,
+          "https://tables.dev.api.unoapp.io/api/v1/tables??page=3&limit=5",
           {
             headers: {
               //"api-token": "6090a6ee31d7d70b13857118a7ead5d6a5d83a8a",
@@ -94,17 +111,9 @@ export default {
     }
   },
   methods: {
-    toggleDrawer() {
-      this.openDrawer = !this.openDrawer;
-    },
-    toggleRight() {
-      this.SideDrawer = !this.SideDrawer;
-    },
     selectRow() {
       this.snackbar = true;
-      //   this.selectedEmployee = this.dataTable["label"];
-      // console.log(this.selectedEmployee);
-      //   this.selectedEmployee.title = event.title;
+
     },
   },
 };

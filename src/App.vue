@@ -1,5 +1,13 @@
 <template>
   <v-app>
+    <div v-if="$route.name != 'loginPage' && $route.name != 'business'">
+      <top-nav
+        @complete-event="toggleDrawer"
+        @right-drawer="toggleRight"
+      ></top-nav>
+      <left-nav :openDrawer="openDrawer"></left-nav>
+      <side-bar :SideDrawer="SideDrawer"></side-bar>
+    </div>
     <v-main>
       <v-container fluid>
         <router-view />
@@ -10,6 +18,20 @@
 <script>
 export default {
   components: {},
+  data() {
+    return {
+      openDrawer: false,
+      SideDrawer: false,
+    };
+  },
+  methods: {
+    toggleDrawer() {
+      this.openDrawer = !this.openDrawer;
+    },
+    toggleRight() {
+      this.SideDrawer = !this.SideDrawer;
+    },
+  },
 };
 </script>
 

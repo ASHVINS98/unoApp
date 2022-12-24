@@ -30,6 +30,7 @@ const routes = [
     name: "table",
     component: TableData,
   },
+
 ];
 
 const router = new VueRouter({
