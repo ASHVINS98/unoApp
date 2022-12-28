@@ -5,6 +5,7 @@ import router from "./router";
 import TopNav from "./components/TopNav.vue";
 import LeftNav from "./components/LeftNav.vue";
 import sideBar from "./components/sideBar.vue";
+
 Vue.config.productionTip = false;
 Vue.component("top-nav", TopNav);
 Vue.component("left-nav", LeftNav);

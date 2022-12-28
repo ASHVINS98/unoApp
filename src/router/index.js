@@ -4,6 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import loginPage from "../views/loginPage.vue";
 import businessesList from "../views/businessesList.vue";
 import TableData from "../components/tableData.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -30,7 +31,12 @@ const routes = [
     name: "table",
     component: TableData,
   },
-
+  {
+    path: "/edit/:id",
+    name: "EditForm",
+    component: () => import("../components/EditForm.vue"),
+    props: true,
+  },
 ];
 
 const router = new VueRouter({
