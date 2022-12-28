@@ -5,34 +5,20 @@
     <v-spacer></v-spacer>
     <v-toolbar-title>welcome</v-toolbar-title>
     <v-spacer></v-spacer>
-    <!-- <v-menu top :close-on-content-click="closeOnContentClick">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">{{
-          user.name
-        }}</v-btn>
-      </template>
-
-      <v-list>
-        <v-list-item v-for="(item, index) in items" :key="index">
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu> -->
+    <v-btn @click="logout" class="mr-5" dark color="#FF5722"
+      ><v-icon>mdi-logout</v-icon></v-btn
+    >
+    <!-- <topNavBusinessVue /> -->
 
     <v-btn icon>
-      <v-icon
-        @click="
-          updateRightDrawer();
-          SetLocations();
-        "
-        >mdi-dots-vertical</v-icon
-      >
+      <v-icon @click="updateRightDrawer">mdi-dots-vertical</v-icon>
     </v-btn>
   </v-app-bar>
 </template>
 <script>
+// import topNavBusinessVue from "./topNavBusiness.vue";
 export default {
-  // props: ["toggleDrawer"],
+  components: {},
   data() {
     return {};
   },
@@ -43,6 +29,16 @@ export default {
     },
     updateRightDrawer() {
       this.$emit("right-drawer");
+    },
+
+    logout() {
+      console.log("logout");
+      // let user = localStorage.removeItem("user-info");
+      localStorage.removeItem("user-info");
+      localStorage.removeItem("selected-location");
+      //if (!user) {
+      this.$router.push({ name: "loginPage" });
+      // }
     },
   },
   // inject:['listTop']

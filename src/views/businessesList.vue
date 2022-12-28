@@ -14,7 +14,7 @@
             <v-list-item v-for="item in lists" :key="item.id">
               <v-list-item-content>
                 <v-btn
-                  @click="selected(item.id)"
+                  @click="selected(item.id, item.name)"
                   class="font-weight-bold"
                   dark
                   color="#FF5752"
@@ -59,8 +59,9 @@ export default {
           },
         }
       );
+
       this.lists = result.data.payload;
-      console.log(this.lists, " this.lists ");
+      console.log(this.lists, "lists of businesss");
     };
 
     getBusinessList();
@@ -69,18 +70,52 @@ export default {
     logout() {
       console.log("logout");
       // let user = localStorage.removeItem("user-info");
-      JSON.parse(localStorage.removeItem("selected-app"));
+      localStorage.removeItem("user-info");
+      localStorage.removeItem("selected-location");
+
+      // JSON.parse(localStorage.removeItem("selected-location");
       //if (!user) {
       this.$router.push({ name: "loginPage" });
       // }
     },
-    selected(id) {
+    selected(id, name) {
       this.id = id;
+      console.log(name, "businessName");
+
       if (JSON.parse(localStorage.getItem("user-info"))) {
-        localStorage.setItem("selected-app", id);
-        this.$router.push({ name: "home" });
+        localStorage.setItem("selected-location", id);
       }
-      console.log("id", this.id);
+      const user = JSON.parse(localStorage.getItem("user-info"));
+      const getBusinessList = async () => {
+        const selectedAppId = localStorage.getItem("selected-location");
+        if (selectedAppId) {
+          await axios.patch(
+            `https://auth.dev.api.unoapp.io/api/v1/users/businesses/${selectedAppId}`,
+            {},
+            {
+              headers: {
+                "api-token": "6090a6ee31d7d70b13857118a7ead5d6a5d83a8a",
+                "auth-token": user["auth-token"],
+              },
+            }
+          );
+          await axios
+            .get(
+              `https://auth.dev.api.unoapp.io/api/v1/businesses/${selectedAppId}?withBranding=true`,
+              {
+                headers: {
+                  "api-token": "6090a6ee31d7d70b13857118a7ead5d6a5d83a8a",
+                  "auth-token": user["auth-token"],
+                },
+              }
+            )
+            .then(() => {
+              this.$router.push({ name: "home" });
+            });
+        }
+      };
+      getBusinessList();
+      console.log("idofbusiness", this.id);
     },
   },
 };

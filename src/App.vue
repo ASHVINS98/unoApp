@@ -17,18 +17,20 @@
 </template>
 <script>
 export default {
-  components: {},
   data() {
     return {
       openDrawer: false,
       SideDrawer: false,
+      selectedLocation: "",
     };
   },
   methods: {
     toggleDrawer() {
       this.openDrawer = !this.openDrawer;
+      console.log(this.welcome, "in appvue");
     },
     toggleRight() {
+      console.log("clicked side bar");
       this.SideDrawer = !this.SideDrawer;
     },
   },

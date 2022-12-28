@@ -92,12 +92,12 @@ export default {
         this.$router.push({ name: "business" });
       }
     },
-    mounted() {
-      let user = localStorage.getItem("user-info");
-      if (user) {
-        this.$router.push({ name: "business" });
-      }
-    },
+  },
+  mounted() {
+    let user = localStorage.getItem("user-info");
+    if (user) {
+      this.$router.push({ name: "business" });
+    }
   },
 };
 </script>
